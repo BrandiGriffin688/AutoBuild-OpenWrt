@@ -98,7 +98,7 @@ jobs:
       run: echo "BUILD_DATE=$(date +%Y%m%d-%H%M)" >> $GITHUB_ENV
 
     - name: Upload firmware to Release
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@master
      # if: github.event_name == 'workflow_dispatch' # 可以限制只有手动触发时才发布 Release，或者去掉这行
       with:
         files: openwrt/bin/targets/*/*/*   # 根据你编译生成的固件具体路径调整通配符
@@ -113,7 +113,7 @@ jobs:
         to: ${{ secrets.TELEGRAM_TO }}
         token: ${{ secrets.TELEGRAM_TOKEN }}
         message: |
-          🎉 OpenWrt 固件编译成功！
+          🎉 OpenWrt 25.12 固件编译成功！
           仓库: ${{ github.repository }}
           分支: ${{ github.ref_name }}
           触发人: ${{ github.actor }}
