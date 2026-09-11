@@ -114,7 +114,7 @@ jobs:
         git push origin v${{ env.BUILD_DATE }}
 
     - name: Upload firmware to Release
-      uses: softprops/action-gh-release@v2
+      uses: softprops/action-gh-release@master
       with:
         files: |
           openwrt/bin/targets/x86/64/*
