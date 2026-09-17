@@ -41,7 +41,7 @@ jobs:
        # git config --global user.name "github-actions[bot]"
         
     - name: Start Syncing Autobuild Most Updated Changes
-      run: git pull https://github.com/Coegyal0910/AutoBuild-OpenWrt.git --log --no-commit
+      run: git pull https://github.com/BrandiGriffin688/AutoBuild-OpenWrt.git
 
     - name: Download All New Changes
       run: |
