@@ -107,14 +107,15 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
-    - name: Send Telegram Notification
-      uses: appleboy/telegram-action@master
-      with:
-        to: ${{ secrets.TELEGRAM_TO }}
-        token: ${{ secrets.TELEGRAM_TOKEN }}
-        message: |
-          🎉 OpenWrt 25.12 固件编译成功！
-          仓库: ${{ github.repository }}
-          分支: ${{ github.ref_name }}
-          触发人: ${{ github.actor }}
+    - name: build success notice
+      if: success()
+      env:
+        REPO: ${{ github.repository }}
+        REF_NAME: ${{ github.ref_name }}
+        ACTOR: ${{ github.actor }}
+      run: |
+        echo "🎉 OpenWrt 25.12 固件编译成功！"
+        echo "仓库: $REPO"
+        echo "分支: $REF_NAME"
+        echo "触发人: $ACTOR"
         
