@@ -102,7 +102,7 @@ jobs:
      # if: github.event_name == 'workflow_dispatch' # 可以限制只有手动触发时才发布 Release，或者去掉这行
       with:
         files: openwrt/bin/targets/*/*/*   # 根据你编译生成的固件具体路径调整通配符
-        name: OpenWrt 25.12 ${{ env.BUILD_DATE }}
+        name: OpenWrt 24.10 ${{ env.BUILD_DATE }}
         tag_name: v${{ env.BUILD_DATE }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -114,7 +114,7 @@ jobs:
         REF_NAME: ${{ github.ref_name }}
         ACTOR: ${{ github.actor }}
       run: |
-        echo "🎉 OpenWrt 25.12 固件编译成功！"
+        echo "🎉 OpenWrt 24.10 固件编译成功！"
         echo "仓库: $REPO"
         echo "分支: $REF_NAME"
         echo "触发人: $ACTOR"
