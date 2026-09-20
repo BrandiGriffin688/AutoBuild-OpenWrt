@@ -54,7 +54,7 @@ jobs:
         
     - name: Clone source code
       env: 
-        REPO_URL: https://github.com/BrandiGriffin688/luci-24.10.git
+        REPO_URL: https://github.com/BrandiGriffin688/openwrt-24.10.git
         REPO_BRANCH: main
       run: |
         git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
