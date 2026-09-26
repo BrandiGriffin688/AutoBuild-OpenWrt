@@ -14,7 +14,7 @@ on:
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     env:
       BUILD_DATE: ""
@@ -54,32 +54,37 @@ jobs:
         
     - name: Clone source code
       env: 
-        REPO_URL: https://github.com/BrandiGriffin688/openwrt-24.10.git
-        REPO_BRANCH: main
+        REPO_URL: https://github.com/Enochs300/openwrt
+        REPO_BRANCH: v25.12.5
       run: |
         git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
-        cd openwrt
-       
+
     - name: Update & Install feeds
       working-directory: ./openwrt
       run: |
+        # 22版、25版的feeds.conf.default这个文件中的src-git有区别，所以在替换以下代码的时候需要注意自己用的是哪个版本的代码，以下目前是把22版的代码注销了。
+        # 替换官方 22版 luci 为你自己的 luci 仓库及对应分支
+        #sed -i 's|src-git-full luci.*|src-git luci https://github.com/Enochs300/luci.git;openwrt-22.03|g' feeds.conf.default
+        
+        # 替换官方 25版 luci 为你自己的 luci 仓库及对应分支
+        sed -i 's|src-git luci.*|src-git luci https://github.com/Enochs300/luci.git;openwrt-25.12|g' feeds.conf.default
+        
         ./scripts/feeds update -a
         ./scripts/feeds install -a
         ./scripts/feeds install -a
-        
-    #- name: Import external feeds - JerryKuKu Argon
-    #  working-directory: ./openwrt
-    #  run: |
-    #    git clone -b 18.06 https://github.com/jerrykuku/luci-theme-argon.git package/luci-theme-argon-jerrykuku   
-  
+
     - name: Configuration Customization
       env:
         CONFIG_FILE: '.config'
       run: |
-        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/.config
-        chmod +x ./customize.sh && ./customize.sh
-        cd openwrt && make defconfig
+        # 【修改点】在 feeds 安装完成后，再将根目录的 .config 移动到 openwrt 内部
+        [ -e $CONFIG_FILE ] && mv $CONFIG_FILE openwrt/$CONFIG_FILE
         
+    - name: Make Defconfig
+      working-directory: ./openwrt
+      run: |
+        make defconfig
+
     - name: Download package
       working-directory: ./openwrt
       run: |
@@ -95,15 +100,14 @@ jobs:
         
     - name: Get current date
       id: date
-      run: echo "BUILD_DATE=$(date +%Y%m%d-%H%M)" >> $GITHUB_ENV
+      run: echo "BUILD_DATE=$(date +\%Y\%m\%d-\%H\%M)" >> $GITHUB_ENV
 
     - name: Upload firmware to Release
       uses: softprops/action-gh-release@master
-     # if: github.event_name == 'workflow_dispatch' # 可以限制只有手动触发时才发布 Release，或者去掉这行
       with:
-        files: openwrt/bin/targets/*/*/*   # 根据你编译生成的固件具体路径调整通配符
-        name: OpenWrt 24.10 ${{ env.BUILD_DATE }}
-        tag_name: v${{ env.BUILD_DATE }}
+        files: openwrt/bin/targets/*/*/*
+        name: OpenWrt 25.12.5 ${{ env.BUILD_DATE }}
+        tag_name: 25.12.5-v${{ env.BUILD_DATE }}
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         
@@ -118,4 +122,3 @@ jobs:
         echo "仓库: $REPO"
         echo "分支: $REF_NAME"
         echo "触发人: $ACTOR"
-        
