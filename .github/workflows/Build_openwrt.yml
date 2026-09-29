@@ -54,7 +54,7 @@ jobs:
         
     - name: Clone source code
       env: 
-        REPO_URL: https://github.com/Enochs300/openwrt
+        REPO_URL: https://github.com/BrandiGriffin688/openwrt
         REPO_BRANCH: v25.12.5
       run: |
         git clone --depth 1 $REPO_URL -b $REPO_BRANCH openwrt
@@ -64,10 +64,10 @@ jobs:
       run: |
         # 22版、25版的feeds.conf.default这个文件中的src-git有区别，所以在替换以下代码的时候需要注意自己用的是哪个版本的代码，以下目前是把22版的代码注销了。
         # 替换官方 22版 luci 为你自己的 luci 仓库及对应分支
-        #sed -i 's|src-git-full luci.*|src-git luci https://github.com/Enochs300/luci.git;openwrt-22.03|g' feeds.conf.default
+        #sed -i 's|src-git-full luci.*|src-git luci https://github.com/BrandiGriffin688/luci.git;openwrt-25.12|g' feeds.conf.default
         
         # 替换官方 25版 luci 为你自己的 luci 仓库及对应分支
-        sed -i 's|src-git luci.*|src-git luci https://github.com/Enochs300/luci.git;openwrt-25.12|g' feeds.conf.default
+        sed -i 's|src-git luci.*|src-git luci https://github.com/BrandiGriffin688/luci.git;openwrt-25.12|g' feeds.conf.default
         
         ./scripts/feeds update -a
         ./scripts/feeds install -a
